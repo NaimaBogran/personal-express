@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <title>Affirmation Garden</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header text-center">
+    <h1>Affirmation Garden</h1>
+    <p>Plant something kind. Water someone else’s words. Come back when you need a little sunshine.</p>
+  </div>
+
+  <div class="row">
+
+    <!-- LEFT: little explanation -->
+    <div class="col-sm-4">
+      <div class="well">
+        <h3>How it works</h3>
+        <p class="helper-text">
+          Anyone can:
+        </p>
+        <ul class="helper-list">
+          <li>Write a short affirmation</li>
+          <li>Like ones that resonate with you</li>
+          <li>Delete your own if you change your mind</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT: feed + form -->
+    <div class="col-sm-8">
+      <h3>Garden Feed</h3>
+
+      <ul class="messages">
+        <% for (var i = 0; i < messages.length; i++) { %>
+          <li class="message">
+            <!-- IMPORTANT: span order must match main.js expectations -->
+
+            <!-- span[0] = name -->
+            <span>Planted by: <%= messages[i].name %></span>
+
+            <!-- span[1] = msg -->
+            <span><%= messages[i].msg %></span>
+
+            <!-- span[2] = thumbUp (count) -->
+            <span><%= messages[i].thumbUp %></span>
+
+            <!-- span[3] = like icon -->
+            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+
+            <!-- span[4] = dislike icon -->
+            <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
+
+            <!-- span[5] = trash icon -->
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+          </li>
+        <% } %>
+      </ul>
+
+      <hr>
+
+      <h3>Plant a New Affirmation</h3>
+      <form action="/messages" method="POST">
+        <div class="form-group">
+          <label>Your name (optional)</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            placeholder="e.g. Naima, Anonymous, SunshineSoul"
+          >
+        </div>
+
+        <div class="form-group add-monologue-form">
+          <label>Affirmation</label>
+          <textarea
+            class="form-control"
+            name="msg"
+            rows="3"
+            placeholder="Example: I am learning, growing, and worthy of taking up space."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          Plant Affirmation
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script src="/main.js"></script>
+</body>
+</html>

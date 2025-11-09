@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', 'Inter', sans-serif;
+  color: #1f2933;
+  background: linear-gradient(135deg, #fef9c3 0%, #dcfce7 40%, #e0f2fe 100%);
+}
+
+/* Example: message cards */
+.message {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.92), rgba(240, 253, 244, 0.9));
+  border-radius: 20px;
+  padding: 16px 20px;
+  border: 1px solid rgba(209, 250, 229, 0.8);
+  box-shadow: 0 12px 30px rgba(22, 163, 74, 0.12);
+}
