@@ -1,3 +1,5 @@
+// server.js
+
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
@@ -7,7 +9,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-// if you already have config/database.js, keep using it:
 const configDB = require('./config/database.js');
 
 // MIDDLEWARE
@@ -19,9 +20,17 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
+// CHOOSE MONGO URI: prefer env var (Render), else config file (local)
+const mongoURI = process.env.MONGODB_URI || configDB.url;
+
+if (!mongoURI) {
+  console.error('No MongoDB URI set.');
+  process.exit(1);
+}
+
 // CONNECT TO MONGO AND START APP
 mongoose
-  .connect(configDB.url)
+  .connect(mongoURI)
   .then(() => {
     console.log('Connected to MongoDB');
 
@@ -55,16 +64,12 @@ mongoose
       }
     });
 
-    // LIKE (thumb up)
+    // LIKE (thumb up) — increment thumbUp by 1
     app.put('/messages', async (req, res) => {
       try {
         const result = await db.collection('messages').findOneAndUpdate(
           { name: req.body.name, msg: req.body.msg },
-          {
-            $set: {
-              thumbUp: req.body.thumbUp + 1
-            }
-          },
+          { $inc: { thumbUp: 1 } },
           {
             sort: { _id: -1 },
             upsert: true,
@@ -78,16 +83,13 @@ mongoose
       }
     });
 
-    // DISLIKE (thumb down)
-    app.put('/messagesDown', async (req, res) => {
+    // DISLIKE (thumb down) — decrement thumbUp by 1
+    // NOTE: path matches frontend: /messages/thumbDown
+    app.put('/messages/thumbDown', async (req, res) => {
       try {
         const result = await db.collection('messages').findOneAndUpdate(
           { name: req.body.name, msg: req.body.msg },
-          {
-            $set: {
-              thumbUp: req.body.thumbUp - 1
-            }
-          },
+          { $inc: { thumbUp: -1 } },
           {
             sort: { _id: -1 },
             upsert: true,
@@ -123,4 +125,3 @@ mongoose
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
-
